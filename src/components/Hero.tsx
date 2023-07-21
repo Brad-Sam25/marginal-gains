@@ -4,16 +4,18 @@ import Link from 'next/link';
 
 const Hero = () => {
 	return (
-		<section>
-			<Image
-				src="/habit-hero.jpg"
-				alt="Image of a habit journal"
-				style={{ objectFit: 'cover' }}
-				fill={true}
-				className="mt-14 brightness-50"
-			/>
-			<div className="flex-1 flex items-center relative top-52">
-				<div className="mx-auto text-white">
+		<div className="relative flex flex-1 items-center justify-center">
+			<div className="min-h-screen">
+				<Image
+					src="/habit-hero.jpg"
+					alt="Image of a habit journal"
+					fill={true}
+					style={{ objectFit: 'cover' }}
+					className="brightness-50"
+				/>
+			</div>
+			<div className="relative text-white">
+				<div className="">
 					<h1 className="text-8xl font-semibold">Marginal Gains</h1>
 					<p className="font-light text-4xl mt-5">Get better by 1% Everyday!</p>
 					<Link
@@ -24,7 +26,7 @@ const Hero = () => {
 					</Link>
 				</div>
 			</div>
-		</section>
+		</div>
 	);
 };
 
