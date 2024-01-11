@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icons } from '@/components/Icon';
+import SignupForm from './signupForm';
 
 const Signup = () => {
 	return (
@@ -11,17 +12,8 @@ const Signup = () => {
 				Sign Up
 			</h1>
 			<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm w-2/4">
-				<div className="text-sm max-w-xs mx-auto mb-10">
-					<p className=" text-black text-center">
-						By continuing, you are setting up a Marginal Gains account and agree to our
-						User Agreement and Privacy Policy.
-					</p>
-				</div>
 				<div className="mb-5">
-					<button className="rounded bg-blue-400 p-4 w-full flex justify-center items-center">
-						<Icons.google className="h-4 w-4 mr-2" />
-						Sign Up
-					</button>
+					<SignupForm />
 				</div>
 			</div>
 		</div>
