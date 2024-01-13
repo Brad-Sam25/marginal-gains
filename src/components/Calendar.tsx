@@ -24,12 +24,14 @@ const Calendar = () => {
 						{months[today.month()]}, {today.year()}
 					</h1>
 					<div className="flex gap-10 items-center">
-						<Icons.arrowLeft
-							className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-							onClick={() => {								
+						<a
+							className='cursor-pointer hover:scale-105 transition-all'
+							onClick={() => {
 								setToday(today.month(today.month() - 1));
 							}}
-						/>
+						>
+							<Icons.arrowLeft className="w-5 h-5" />
+						</a>
 						<a
 							className="cursor-pointer hover:scale-105 transition-all"
 							onClick={() => {
@@ -38,12 +40,14 @@ const Calendar = () => {
 						>
 							Today
 						</a>
-						<Icons.arrowRight
-							className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+						<a
+							className='cursor-pointer hover:scale-105 transition-all'
 							onClick={() => {
 								setToday(today.month(today.month() + 1));
 							}}
-						/>
+						>
+							<Icons.arrowRight className="w-5 h-5 hover:scale-105 transition-all" />
+						</a>
 					</div>
 				</div>
 				<div className="grid grid-cols-7 ">
