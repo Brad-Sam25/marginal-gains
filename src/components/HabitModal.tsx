@@ -1,8 +1,13 @@
+"use client";
+
 import React from 'react';
+//@ts-ignore
+import { useFormState } from "react-dom";
 
 const HabitModal = () => {
+    const [state, formAction] = useFormState(storeFormInput, null)
 	return (
-		<div>
+		<form action={formAction}>
 			<h1 className=''>Create new Habits</h1>
             <label htmlFor="habit-title">Please create a name for your Habit</label>
             <input type="text" id="habit-title" name="habit-name" />
@@ -12,7 +17,7 @@ const HabitModal = () => {
             <input type="text" name="habit-frequency" id="habit-freq" />
             <label htmlFor="cue">When/Then Intentions</label>
             <input type="text" name="cue-based-plan" id="cue" placeholder="When I [specific situation], then I will [specific action]" />
-		</div>
+		</form>
 	);
 };
 
