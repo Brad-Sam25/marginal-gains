@@ -4,17 +4,17 @@ import { prisma } from "@/lib/prisma";
 
 export async function createNewHabit(state: any, formData: FormData) {
     const schema = z.object({
-        habitTitle: z.string(),
-        startDate: z.date(),
-        habitFrequency: z.number(),
-        cueBasedPlan: z.string()
+        habit_title: z.string(),
+        start_date: z.date(),
+        habit_frequency: z.number(),
+        cue_based_plan: z.string()
     })
 
     const parse = schema.safeParse({
-        habitTitle: formData.get("habitTitle"),
-        startDate: formData.get("startDate"),
-        habitFrequency: formData.get("habitFrequency"),
-        cueBasedPlan: formData.get("cueBasedPlan")
+        habit_title: formData.get("habit_title"),
+        start_date: formData.get("start_date"),
+        habit_frequency: formData.get("habit_frequency"),
+        cue_based_plan: formData.get("cue_based_plan")
     })
 
     if(!parse.success) {
@@ -22,4 +22,15 @@ export async function createNewHabit(state: any, formData: FormData) {
     }
 
     const parsedData = parse.data
+
+    try {
+        await prisma.userHabits.create({
+            habit_title: parsedData.habit_title,
+            start_date: parsedData.start_date,
+            habit_frequency: parsedData.habit_frequency,
+            cue_based_plan: parsedData.cue_based_plan
+        })
+    } catch (error) {
+        return {message: {"Cannot Save new Habit!"}}
+    }
 }
