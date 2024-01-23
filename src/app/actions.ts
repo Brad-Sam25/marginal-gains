@@ -25,10 +25,13 @@ export async function createNewHabit(state: any, formData: FormData) {
 
     try {
         await prisma.userHabits.create({
-            habit_title: parsedData.habit_title,
-            start_date: parsedData.start_date,
-            habit_frequency: parsedData.habit_frequency,
-            cue_based_plan: parsedData.cue_based_plan
+            data: {
+                // userId: 
+                habit_title: parsedData.habit_title,
+                start_date: parsedData.start_date,
+                habit_frequency: parsedData.habit_frequency,
+                cue_based_plan: parsedData.cue_based_plan
+            }
         })
     } catch (error) {
         return {message: {"Cannot Save new Habit!"}}
