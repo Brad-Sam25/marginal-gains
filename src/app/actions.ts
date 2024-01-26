@@ -1,6 +1,7 @@
 "use server"
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { getAuthSession } from "@/lib/authOptions";
 
 export async function createNewHabit(state: any, formData: FormData) {
     const schema = z.object({
@@ -22,11 +23,12 @@ export async function createNewHabit(state: any, formData: FormData) {
     }
 
     const parsedData = parse.data
+    const session = await getAuthSession();
 
     try {
         await prisma.userHabits.create({
             data: {
-                // userId: 
+                userId: session?.user?.id,
                 habit_title: parsedData.habit_title,
                 start_date: parsedData.start_date,
                 habit_frequency: parsedData.habit_frequency,
