@@ -7,3 +7,11 @@ declare module "next-auth" {
         } & DefaultSession["user"]
     }
 }
+
+export interface UserHabitCreateInput {
+    userId: string| null;
+    habit_title: string;
+    start_date: Date;
+    habit_frequency: number;
+    cue_based_plan: string;
+}
