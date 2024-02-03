@@ -25,6 +25,10 @@ export async function createNewHabit(state: any, formData: FormData) {
     const parsedData = parse.data
     const session = await getAuthSession();
 
+    if(!session?.user?.id) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
     try {
         await prisma.userHabits.create({
             data: {
@@ -36,6 +40,6 @@ export async function createNewHabit(state: any, formData: FormData) {
             }
         })
     } catch (error) {
-        return {message: {"Cannot Save new Habit!"}}
+        return {message: "Cannot Save new Habit!"}
     }
 }
