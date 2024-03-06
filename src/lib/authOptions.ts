@@ -76,17 +76,20 @@ export const authOptions: NextAuthOptions = {
 			return false;
 		},
 		async session({ session, token }) {
-			if (session.user?.id && session.user?.name) {
+			if (session?.user) {
 				session.user.name = token.name;
 				session.user.id = token.sub;
 			}
 			return session;
 		},
 		async jwt({ token, user }) {
-			// * User only available on first run.
-			let newUser = { ...user } as any;
-			if (newUser.id) token.id = `${newUser.id}`;
-			return token;
+			if (user) {
+				token.sub = user.id
+			}
+			return token
+			// let newUser = { ...user } as any;
+			// if (newUser.id) token.sub = `${newUser.id}`;
+			// return token;
 		},
 	},
 };

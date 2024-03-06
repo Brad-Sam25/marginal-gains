@@ -1,66 +1,54 @@
 'use server';
-import { z } from 'zod';
+import { ZodError, z } from 'zod';
 import { prisma } from '@/lib/prisma';
-import { getAuthSession } from '@/lib/authOptions';
+import { authOptions } from '@/lib/authOptions';
+import { getServerSession } from 'next-auth';
 
-export type Fields = {
-    habit_title: string;
-    start_date: Date;
-    habit_frequency: number;
-    cue_based_plan: string;    
-};
-
-export type FormState = {
-	messages: string;
-	errors: Record<keyof Fields, string> | undefined;
-	fieldValues: Fields
-};
-
-export async function createNewHabit(state: FormState, formData: FormData) {
+export async function createNewHabit(state: any, formData: FormData) {
 	const schema = z.object({
 		habit_title: z.string(),
 		start_date: z.date(),
-		habit_frequency: z.number(),
+		habit_frequency: z.number().int(),
 		cue_based_plan: z.string(),
 	});
 
-	// const parse = schema.parse({
-	// 	habit_title: formData.get('habit_title'),
-	// 	start_date: formData.get('start_date'),
-	// 	habit_frequency: formData.get('habit_frequency'),
-	// 	cue_based_plan: formData.get('cue_based_plan'),
-	// });
+	const handleZodError = (error: ZodError) => {
+		console.error('Validation failed:', error.errors);
+	};
 
-    try {
-        const parse = schema.parse(formData)
-        console.log(parse);
-        
-    } catch(e) {
+	try {
+		const validatedInput = schema.parse({
+			habit_title: formData.get('habit_title') || state.habit_title,
+			start_date: new Date(formData.get('start_date') || state.start_date),
+			habit_frequency: parseInt(
+				formData.get('habit_frequency') || state.habit_frequency
+			),
+			cue_based_plan: formData.get('cue_based_plan') || state.cue_based_plan,
+		});
 
-    }
+		const session = await getServerSession(authOptions);
 
-	return { data: parse.data };
+		if (!session?.user?.id) {
+			return new Response('Unauthorized', { status: 401 });
+		}
 
-	// const parsedData = parse.data
-	// const session = await getAuthSession();
+		const newUserHabits = await prisma.userHabits.create({
+			data: {
+				userId: session?.user?.id,
+				habit_title: validatedInput.habit_title,
+				start_date: validatedInput.start_date,
+				habit_frequency: validatedInput.habit_frequency,
+				cue_based_plan: validatedInput.cue_based_plan,
+			},
+		});
 
-	// if(!session?.user?.id) {
-	//     return new Response('Unauthorized', { status: 401 })
-	// }
-
-	// try {
-	//     await prisma.userHabits.create({
-	//         data: {
-	//             userId: session?.user?.id,
-	//             habit_title: parsedData.habit_title,
-	//             start_date: parsedData.start_date,
-	//             habit_frequency: parsedData.habit_frequency,
-	//             cue_based_plan: parsedData.cue_based_plan
-	//         }
-	//     })
-
-	//     return Response(dart)
-	// } catch (error) {
-	//     return {message: "Cannot Save new Habit!"}
-	// }
+		console.log(newUserHabits);
+		
+	} catch (error) {
+		if (error instanceof ZodError) {
+			handleZodError(error);
+		} else {
+			console.error('Unexpected error: ', error);
+		}
+	}
 }
